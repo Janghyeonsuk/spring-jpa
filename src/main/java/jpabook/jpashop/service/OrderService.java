@@ -1,9 +1,6 @@
 package jpabook.jpashop.service;
 
-import jpabook.jpashop.domain.Delivery;
-import jpabook.jpashop.domain.Member;
-import jpabook.jpashop.domain.Order;
-import jpabook.jpashop.domain.OrderItem;
+import jpabook.jpashop.domain.*;
 import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.repository.ItemRepository;
 import jpabook.jpashop.repository.MemberRepository;
@@ -61,8 +58,8 @@ public class OrderService {
         order.cancel();
     }
 
-    /*//검색
-    public List<Order> findOrders(OrderSerch orderSerch) {
-        return orderRepository.findAll(orderSerch);
-    }*/
+    //검색 단순 조회(위임)시에는 Controller에서 바로 레퍼지토리로 위임해도 됨
+    public List<Order> findOrders(OrderSearch orderSearch) {
+        return orderRepository.findAllByString(orderSearch);
+    }
 }

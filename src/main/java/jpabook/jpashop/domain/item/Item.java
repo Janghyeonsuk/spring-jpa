@@ -45,4 +45,13 @@ public abstract class Item {
         }
         this.stockQuantity = restStock;
     }
+
+    //변경 감지 메서드
+    public Item change(Item item, String name, int price, int stockQuantity) {
+        item.setName(name);
+        item.setPrice(price);
+        item.setStockQuantity(stockQuantity);
+
+        return item;
+    }
 }
