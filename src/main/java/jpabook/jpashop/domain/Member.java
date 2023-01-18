@@ -26,7 +26,7 @@ public class Member {
     @Embedded
     private Address address;
 
-//    @JsonIgnore //멤버를 조회할때 JSON에서 orders를 빼줌
+    @JsonIgnore //멤버를 조회할때 JSON에서 orders를 빼줌
     @OneToMany(mappedBy = "member") //양방향 관계에서 주인이 order에 member
     private List<Order> orders = new ArrayList<>();
 

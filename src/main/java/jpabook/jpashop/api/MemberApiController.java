@@ -78,7 +78,7 @@ public class MemberApiController {
                                                @RequestBody @Valid UpdateMemberRequest request) {
         //커맨드와 쿼리를 분리하자 -> 만약 member를 반환하면 update하면서 member를 쿼리하는 꼴이 되어버린다
         //update는 변경성 메서드인데 (커맨드) member를 통해서 찾게되는 (쿼리)가 동시에 일어남
-        //만약 update 메서드에서 member를 반환하면 영속성이 끊긴 member를 사용하게되므로 id값이나 그냥 값만 바꿔주는 방법을 사용
+        //만약 update 메서드에서 member를 반환하면 영속성이 끊긴 member를 사용하게되므로 void로 값만 바꿔주는 방법을 사용
         memberService.update(id, request.getName());
         Member findMember = memberService.findOne(id);
         return new UpdateMemberResponse(findMember.getId(), findMember.getName());

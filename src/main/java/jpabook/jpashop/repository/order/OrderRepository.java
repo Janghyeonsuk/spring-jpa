@@ -1,7 +1,6 @@
-package jpabook.jpashop.repository;
+package jpabook.jpashop.repository.order;
 
 import jpabook.jpashop.domain.Order;
-import jpabook.jpashop.domain.OrderSearch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -49,7 +48,8 @@ public class OrderRepository {
                 jpql += " and";
             }
             jpql += " m.name like :name";
-        } TypedQuery<Order> query = em.createQuery(jpql, Order.class)
+        }
+        TypedQuery<Order> query = em.createQuery(jpql, Order.class)
                 .setMaxResults(1000); //최대 1000건
         if (orderSearch.getOrderStatus() != null) {
             query = query.setParameter("status", orderSearch.getOrderStatus());
@@ -91,4 +91,16 @@ public class OrderRepository {
         TypedQuery<Order> query = em.createQuery(cq).setMaxResults(1000); //최대1000건
         return query.getResultList();
     }
+
+    //장점 : Api에서 재활용성이 높음 / 엔티티를 조회한 것으로 데이터 변경이 가능
+    //단점 : select 절에서 불필요한 쿼리가 나감
+    public List<Order> findAllWithMemberDelivery() {
+        //fetch 조인 -> member와 delivery의 Lazy를 다 무시하고 프록시가 아닌 진짜 객체를 다 가져옴
+        return em.createQuery(
+                "select o from Order o " +
+                        " join fetch o. member m" +
+                        " join fetch o.delivery d", Order.class
+        ).getResultList();
+    }
+
 }

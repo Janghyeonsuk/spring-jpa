@@ -4,7 +4,8 @@ import jpabook.jpashop.domain.*;
 import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.repository.ItemRepository;
 import jpabook.jpashop.repository.MemberRepository;
-import jpabook.jpashop.repository.OrderRepository;
+import jpabook.jpashop.repository.order.OrderRepository;
+import jpabook.jpashop.repository.order.OrderSearch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +36,7 @@ public class OrderService {
         delivery.setAddress(member.getAddress());
 
         //주문상품 생성
-        OrderItem orderItem = OrderItem.createOrderIem(item, item.getPrice(), count);
+        OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);
 
         //주문 생성
         Order order = Order.createOrder(member, delivery, orderItem);
