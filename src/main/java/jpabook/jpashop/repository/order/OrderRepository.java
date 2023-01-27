@@ -103,4 +103,29 @@ public class OrderRepository {
         ).getResultList();
     }
 
+    //JPA distinct
+    //1. DB에 distinct를 추가, 컬럼의 모든 속성 값이 같아야 중복을 제거해준다
+    //2. 루트(Order)같은 엔티티의 (id 값이 같으면) 중복 제거하고 컬렉션에 한개만 담는다
+    //단점 -> 페이징 쿼리가 안나감 1대다 페치조인시 하이버네이트에서 애플리케이션 내부에 올리고 처리를 해주어 값이 큰경우 오류 발생
+    public List<Order> findAllWithItem() {
+        return em.createQuery(
+                        "select distinct o from Order o" +
+                                " join fetch o.member m" +
+                                " join fetch o.delivery d" +
+                                " join fetch o.orderItems oi" +
+                                " join fetch oi.item i", Order.class)
+                .getResultList();
+    }
+
+    //ToOne에서는 뻥튀기 되는일이 없으므로 fetch 조인을 쓰는게 효율적, 페이징에 영향을 주지 않음
+    //따라서 ToOne 관계는 페치조인으로 쿼리수를 줄이고 나머지는 batch_fetch_size를 사용
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                        "select o from Order o " +
+                                " join fetch o. member m" +
+                                " join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
 }
